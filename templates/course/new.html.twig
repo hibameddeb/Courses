@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Course{% endblock %}
+
+{% block body %}
+    <div class="container mx-auto px-4 py-8">
+        <div class="mb-8 flex justify-between items-center">
+            <div class="flex items-center">
+                <h1 class="text-3xl font-bold text-gray-800">Create New Course</h1>
+                <span class="ml-4 bg-green-100 text-green-800 text-xs font-medium px-3 py-1 rounded-full">New Entry</span>
+            </div>
+            <a href="{{ path('app_course_index') }}" class="bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-md transition duration-300 flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to list
+            </a>
+        </div>
+
+        <div class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+            <div class="max-w-3xl mx-auto">
+                <div class="mb-6 p-5 bg-blue-50 rounded-lg border border-blue-100">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-blue-800">Create a New Course</h3>
+                            <div class="mt-2 text-sm text-blue-700">
+                                <p>Fill out the form below to create a new course. All fields marked as required must be completed.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{ include('course/_form.html.twig', {'button_label': 'Create Course'}) }}
+        </div>
+    </div>
+{% endblock %}
