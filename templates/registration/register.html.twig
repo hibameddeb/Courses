@@ -1,0 +1,68 @@
+{# templates/registration/register.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    {# Make sure Tailwind CSS is included in your project #}
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h1 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Create your account
+            </h1>
+            <p class="mt-2 text-center text-sm text-gray-600">
+                Or
+                <a href="{{ path('app_login') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                    sign in if you already have an account
+                </a>
+            </p>
+        </div>
+        
+        {{ form_start(registrationForm, {'attr': {'class': 'mt-8 space-y-6'}}) }}
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div class="mb-4">
+                    {{ form_label(registrationForm.email, 'Email Address', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.email, {'attr': {'class': 'mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm', 'placeholder': 'Email address'}}) }}
+                    {{ form_errors(registrationForm.email) }}
+                </div>
+                
+                <div class="mb-4">
+                    {{ form_label(registrationForm.plainPassword, 'Password', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm', 'placeholder': 'Password'}}) }}
+                    {{ form_errors(registrationForm.plainPassword) }}
+                </div>
+                
+                <div class="mb-4">
+                    {{ form_label(registrationForm.userRole, 'Role', {'label_attr': {'class': 'block text-sm font-medium text-gray-700'}}) }}
+                    {{ form_widget(registrationForm.userRole, {'attr': {'class': 'mt-1 appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'}}) }}
+                    {{ form_errors(registrationForm.userRole) }}
+                </div>
+                
+                <div class="flex items-center mt-4">
+                    {{ form_widget(registrationForm.agreeTerms, {'attr': {'class': 'h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded'}}) }}
+                    {{ form_label(registrationForm.agreeTerms, 'I agree to the Terms of Service', {'label_attr': {'class': 'ml-2 block text-sm text-gray-900'}}) }}
+                    {{ form_errors(registrationForm.agreeTerms) }}
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                        </svg>
+                    </span>
+                    Register
+                </button>
+            </div>
+        {{ form_end(registrationForm) }}
+    </div>
+</div>
+{% endblock %}
