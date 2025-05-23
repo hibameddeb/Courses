@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Available Courses{% endblock %}
+
+{% block body %}
+<div class="bg-gradient-to-b from-indigo-50 to-white min-h-screen py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-16">
+            <h1 class="text-4xl font-extrabold text-gray-900 sm:text-5xl lg:text-6xl bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-blue-500">
+                Available Courses
+            </h1>
+            <div class="mt-6 max-w-2xl mx-auto">
+                <p class="text-xl text-gray-600">
+                    Browse our selection of courses and start learning today
+                </p>
+                <div class="mt-8 flex justify-center">
+                    <div class="inline-flex shadow-md rounded-md">
+                        <a href="#browse" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-l-md text-white bg-indigo-600 hover:bg-indigo-700 transition duration-300 ease-in-out">
+                            Browse All
+                        </a>
+                        <a href="#featured" class="inline-flex items-center justify-center px-6 py-3 border border-transparent text-base font-medium rounded-r-md text-indigo-600 bg-white hover:bg-gray-50 transition duration-300 ease-in-out">
+                            Featured
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if courses|length > 0 %}
+            <div id="browse" class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                {% for course in courses %}
+                    <div class="group bg-white overflow-hidden shadow-md hover:shadow-xl rounded-xl transform hover:-translate-y-1 transition duration-300 ease-in-out border border-gray-100">
+                        <div class="h-3 bg-gradient-to-r from-indigo-500 to-blue-500"></div>
+                        <div class="px-6 py-6">
+                            <div class="flex items-center">
+                                <div class="flex-shrink-0 bg-indigo-100 rounded-lg p-3">
+                                    <svg class="h-8 w-8 text-indigo-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                </div>
+                                <div class="ml-4">
+                                    <h3 class="text-xl font-bold text-gray-800 group-hover:text-indigo-600 transition duration-300">{{ course.title }}</h3>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-6 border-t border-gray-100 pt-4">
+                                <p class="text-gray-600 h-24 overflow-hidden">{{ course.description }}</p>
+                            </div>
+                            
+                            <div class="mt-6 flex items-center justify-between">
+                                <div class="flex items-center">
+                                    <div class="flex items-center">
+                                        <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                        <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                        <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                        <svg class="h-5 w-5 text-yellow-400" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                        <svg class="h-5 w-5 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
+                                        </svg>
+                                    </div>
+                                </div>
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+                                    New
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-gray-50 px-6 py-4">
+                            <div class="flex items-center justify-between">
+                                <a href="{{ path('course_detail', {id: course.id}) }}" class="text-indigo-600 hover:text-indigo-800 text-sm font-medium transition duration-300">
+                                    View course
+                                </a>
+                                <a href="{{ path('student_course_enroll', {id: course.id}) }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">
+                                    Enroll Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="bg-white shadow-lg rounded-lg p-12 text-center border border-gray-100">
+                <div class="bg-gray-100 rounded-full p-6 w-24 h-24 mx-auto flex items-center justify-center">
+                    <svg class="h-12 w-12 text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                </div>
+                <h3 class="mt-6 text-2xl font-bold text-gray-800">No courses available</h3>
+                <p class="mt-2 text-lg text-gray-500">Check back later for new course offerings.</p>
+                <div class="mt-8">
+                    <a href="#" class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-lg text-white bg-gradient-to-r from-indigo-600 to-blue-500 hover:from-indigo-700 hover:to-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition duration-300">
+                        Notify me when courses are available
+                    </a>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

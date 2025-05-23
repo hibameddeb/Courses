@@ -1,0 +1,426 @@
+{# templates/chatbot/chat.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Chatbot{% endblock %}
+
+{% block body %}
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>
+                <svg class="chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                AI Assistant
+            </h1>
+            <p class="chat-subtitle">Powered by Groq & Symfony</p>
+        </div>
+        
+        <div class="chat-messages" id="chatMessages">
+            {% for message in chat_history %}
+                <div class="message message-{{ message.role }}">
+                    <div class="message-avatar">
+                        {% if message.role == 'user' %}
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                        {% else %}
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 1v6m0 6v6"/>
+                                <path d="m21 12-6-3-6 3-6-3"/>
+                            </svg>
+                        {% endif %}
+                    </div>
+                    <div class="message-content">
+                        <div class="message-header">
+                            <span class="message-author">{{ message.role == 'user' ? 'You' : 'Assistant' }}</span>
+                            <span class="message-time">{{ 'now'|date('H:i') }}</span>
+                        </div>
+                        <div class="message-text">{{ message.content|nl2br }}</div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="empty-chat">
+                    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                        <path d="M8 10h.01M12 10h.01M16 10h.01"/>
+                    </svg>
+                    <h3>Welcome to AI Assistant</h3>
+                    <p>Start a conversation by typing a message below!</p>
+                </div>
+            {% endfor %}
+        </div>
+        
+        <div class="chat-actions">
+            <form method="post" class="chat-form">
+                <div class="input-group">
+                    <input type="text" 
+                           name="message" 
+                           value="{{ user_message }}" 
+                           placeholder="Type your message here..." 
+                           class="message-input"
+                           required
+                           autocomplete="off">
+                    <button type="submit" class="send-button">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"/>
+                            <polygon points="22,2 15,22 11,13 2,9 22,2"/>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+            
+            <form action="{{ path('chatbot_clear') }}" method="post" class="clear-form">
+                <button type="submit" class="clear-button" onclick="return confirm('Are you sure you want to clear the chat?')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="3,6 5,6 21,6"/>
+                        <path d="m19,6v14a2,2 0 0,1 -2,2H7a2,2 0 0,1 -2,-2V6m3,0V4a2,2 0 0,1 2,-2h4a2,2 0 0,1 2,2v2"/>
+                    </svg>
+                    Clear
+                </button>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .chat-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            text-align: center;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .chat-header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .chat-icon {
+            width: 32px;
+            height: 32px;
+        }
+        
+        .chat-subtitle {
+            margin: 5px 0 0 0;
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 3px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 3px;
+        }
+        
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        
+        .message {
+            display: flex;
+            gap: 12px;
+            animation: fadeInUp 0.3s ease-out;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .message-user {
+            flex-direction: row-reverse;
+        }
+        
+        .message-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .message-user .message-avatar {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .message-assistant .message-avatar {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+            color: white;
+        }
+        
+        .message-avatar svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .message-content {
+            flex: 1;
+            max-width: 70%;
+        }
+        
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        
+        .message-author {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #555;
+        }
+        
+        .message-time {
+            font-size: 0.8rem;
+            color: #999;
+        }
+        
+        .message-text {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-radius: 18px;
+            line-height: 1.4;
+            color: #333;
+            word-wrap: break-word;
+        }
+        
+        .message-user .message-text {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .message-assistant .message-text {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+        }
+        
+        .empty-chat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            color: #666;
+            text-align: center;
+        }
+        
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+        
+        .empty-chat h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .empty-chat p {
+            margin: 0;
+            opacity: 0.7;
+        }
+        
+        .chat-actions {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        
+        .chat-form {
+            flex: 1;
+        }
+        
+        .input-group {
+            display: flex;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: box-shadow 0.2s ease;
+        }
+        
+        .input-group:focus-within {
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .message-input {
+            flex: 1;
+            border: none;
+            padding: 16px 20px;
+            font-size: 1rem;
+            outline: none;
+            background: transparent;
+        }
+        
+        .message-input::placeholder {
+            color: #999;
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 16px 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .send-button:hover {
+            background: linear-gradient(135deg, #5a6fd8, #6a42a0);
+            transform: translateY(-1px);
+        }
+        
+        .send-button:active {
+            transform: translateY(0);
+        }
+        
+        .send-button svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        .clear-button {
+            background: white;
+            border: 2px solid #dc3545;
+            color: #dc3545;
+            padding: 12px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+        }
+        
+        .clear-button:hover {
+            background: #dc3545;
+            color: white;
+            transform: translateY(-1px);
+        }
+        
+        .clear-button svg {
+            width: 16px;
+            height: 16px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .chat-container {
+                padding: 10px;
+                height: 100vh;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .message-content {
+                max-width: 85%;
+            }
+            
+            .chat-actions {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .clear-form {
+                width: 100%;
+            }
+            
+            .clear-button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .message-content {
+                max-width: 90%;
+            }
+            
+            .message-text {
+                padding: 10px 14px;
+                font-size: 0.95rem;
+            }
+            
+            .input-group {
+                border-radius: 20px;
+            }
+            
+            .message-input {
+                padding: 14px 18px;
+                font-size: 0.95rem;
+            }
+            
+            .send-button {
+                padding: 14px 18px;
+            }
+        }
+    </style>
+{% endblock %}
